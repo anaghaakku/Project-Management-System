@@ -28,11 +28,11 @@ func Login(db *gorm.DB) gin.HandlerFunc {
             return
         }
 
-        log.Printf("🔍 Stored hash: %s (length: %d)", user.Password, len(user.Password))
-        log.Printf("🔍 Provided password: %s (length: %d)", req.Password, len(req.Password))
+        log.Printf(" Stored hash: %s (length: %d)", user.Password, len(user.Password))
+        log.Printf(" Provided password: %s (length: %d)", req.Password, len(req.Password))
 
         err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
-        log.Printf("🔍 bcrypt error: %v", err)
+        log.Printf(" bcrypt error: %v", err)
 
         if err != nil {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
@@ -65,27 +65,24 @@ func Register(db *gorm.DB) gin.HandlerFunc {
             return
         }
 
-        // Check if user already exists
         var existing models.User
         if err := db.Where("email = ?", user.Email).First(&existing).Error; err == nil {
             c.JSON(http.StatusBadRequest, gin.H{"error": "Email already registered"})
             return
         }
 
-        // ✅ DIRECT BCRYPT HASHING
         hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
         if err != nil {
-            log.Printf("❌ Failed to hash password: %v", err)
+            log.Printf(" Failed to hash password: %v", err)
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
             return
         }
         user.Password = string(hashed)
 
-        log.Printf("🔑 Hashed password for %s: %s (length: %d)", user.Email, user.Password, len(user.Password))
+        log.Printf(" Hashed password for %s: %s (length: %d)", user.Email, user.Password, len(user.Password))
 
-        // Create user
         if err := db.Create(&user).Error; err != nil {
-            log.Printf("❌ Database error while creating user: %v", err)
+            log.Printf(" Database error while creating user: %v", err)
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user: " + err.Error()})
             return
         }

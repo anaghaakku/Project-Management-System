@@ -16,51 +16,44 @@ func CreateTask(db *gorm.DB) gin.HandlerFunc {
         log.Printf("📥 CreateTask called")
 
         if err := c.ShouldBindJSON(&task); err != nil {
-            log.Printf("❌ Failed to bind JSON: %v", err)
+            log.Printf("Failed to bind JSON: %v", err)
             c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
             return
         }
 
-        log.Printf("📦 Task data: %+v", task)
+        log.Printf(" Task data: %+v", task)
 
-        // ✅ Start transaction
         tx := db.Begin()
 
-        // Validate project exists
         var project models.Project
         if err := tx.First(&project, task.ProjectID).Error; err != nil {
             tx.Rollback()
-            log.Printf("❌ Project not found: %v", err)
+            log.Printf(" Project not found: %v", err)
             c.JSON(http.StatusBadRequest, gin.H{"error": "Project not found"})
             return
         }
-
-        // Validate user exists (assigned_to)
         var user models.User
         if err := tx.First(&user, task.AssignedTo).Error; err != nil {
             tx.Rollback()
-            log.Printf("❌ User not found: %v", err)
+            log.Printf(" User not found: %v", err)
             c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
             return
         }
 
-        // Set default status
         if task.Status == "" {
             task.Status = "pending"
         }
 
-        // Create task
         if err := tx.Create(&task).Error; err != nil {
             tx.Rollback()
-            log.Printf("❌ Database error: %v", err)
+            log.Printf("Database error: %v", err)
             c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
             return
         }
 
-        // ✅ Commit transaction
         tx.Commit()
 
-        log.Printf("✅ Task created: ID=%d, Title=%s", task.ID, task.Title)
+        log.Printf(" Task created: ID=%d, Title=%s", task.ID, task.Title)
         c.JSON(http.StatusCreated, task)
     }
 }
@@ -69,7 +62,6 @@ func ListTasks(db *gorm.DB) gin.HandlerFunc {
     return func(c *gin.Context) {
         var tasks []models.Task
 
-        // ✅ Get pagination parameters
         page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
         limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 
@@ -82,20 +74,19 @@ func ListTasks(db *gorm.DB) gin.HandlerFunc {
 
         offset := (page - 1) * limit
 
-        // Build query with filters
+        
         query := db.Model(&models.Task{})
 
-        // ✅ Filter by project
+        
         if projectID := c.Query("project_id"); projectID != "" {
             query = query.Where("project_id = ?", projectID)
         }
 
-        // ✅ Filter by status
+       
         if status := c.Query("status"); status != "" {
             query = query.Where("status = ?", status)
         }
 
-        // ✅ Filter by assigned user
         if assignedTo := c.Query("assigned_to"); assignedTo != "" {
             query = query.Where("assigned_to = ?", assignedTo)
         }
@@ -133,7 +124,7 @@ func UpdateTaskStatus(db *gorm.DB) gin.HandlerFunc {
             return
         }
 
-        // Validate status
+        
         validStatuses := map[string]bool{
             "pending":     true,
             "in_progress": true,
@@ -145,7 +136,6 @@ func UpdateTaskStatus(db *gorm.DB) gin.HandlerFunc {
             return
         }
 
-        // ✅ Start transaction
         tx := db.Begin()
 
         var task models.Task
@@ -163,7 +153,6 @@ func UpdateTaskStatus(db *gorm.DB) gin.HandlerFunc {
             return
         }
 
-        // ✅ Commit transaction
         tx.Commit()
 
         c.JSON(http.StatusOK, task)

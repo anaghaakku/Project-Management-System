@@ -18,14 +18,13 @@ func CreateUser(db *gorm.DB) gin.HandlerFunc {
             return
         }
 
-        // Check if user already exists
         var existing models.User
         if err := db.Where("email = ?", user.Email).First(&existing).Error; err == nil {
             c.JSON(http.StatusBadRequest, gin.H{"error": "Email already registered"})
             return
         }
 
-        // Hash password
+        
         hashed, err := utils.HashPassword(user.Password)
         if err != nil {
             c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
@@ -54,7 +53,6 @@ func ListUsers(db *gorm.DB) gin.HandlerFunc {
     return func(c *gin.Context) {
         var users []models.User
 
-        // ✅ Get pagination parameters
         page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
         limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 

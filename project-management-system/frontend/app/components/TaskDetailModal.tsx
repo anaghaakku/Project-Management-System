@@ -41,11 +41,11 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return '✅';
+        return '';
       case 'in_progress':
         return '🔄';
       default:
-        return '⏳';
+        return '';
     }
   };
 
@@ -70,7 +70,7 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            📋 Task Details
+             Task Details
           </h2>
           <button
             onClick={onClose}
@@ -87,13 +87,13 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
         )}
 
         <div className="space-y-4">
-          {/* Title */}
+          
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Title</label>
             <p className="text-lg font-semibold text-gray-800 mt-1">{task.title}</p>
           </div>
 
-          {/* Description */}
+   
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Description</label>
             <p className="text-gray-700 mt-1 bg-gray-50 p-3 rounded-xl border border-gray-200">
@@ -101,7 +101,6 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
             </p>
           </div>
 
-          {/* Status */}
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Current Status</label>
             <div className="mt-1">
@@ -111,19 +110,16 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
             </div>
           </div>
 
-          {/* Project */}
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Project</label>
             <p className="text-gray-700 mt-1">Project #{task.project_id}</p>
           </div>
 
-          {/* Assigned To */}
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</label>
             <p className="text-gray-700 mt-1">User #{task.assigned_to}</p>
           </div>
 
-          {/* Created At */}
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</label>
             <p className="text-gray-700 mt-1 text-sm">
@@ -131,7 +127,6 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
             </p>
           </div>
 
-          {/* Updated At */}
           <div>
             <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated</label>
             <p className="text-gray-700 mt-1 text-sm">
@@ -140,7 +135,6 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
           </div>
         </div>
 
-        {/* ✅ Status Update Buttons */}
         <div className="mt-6 pt-4 border-t border-gray-200">
           <div className="flex flex-col gap-2">
             <div className="flex gap-2">
@@ -150,7 +144,7 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
                   disabled={loading}
                   className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all font-medium disabled:opacity-50"
                 >
-                  ⏳ Set Pending
+                  Set Pending
                 </button>
               )}
               {task.status !== 'in_progress' && (
@@ -159,7 +153,7 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
                   disabled={loading}
                   className="flex-1 px-4 py-2 bg-amber-100 text-amber-700 rounded-xl hover:bg-amber-200 transition-all font-medium disabled:opacity-50"
                 >
-                  🔄 In Progress
+                   In Progress
                 </button>
               )}
               {task.status !== 'completed' && (
@@ -168,7 +162,7 @@ export default function TaskDetailModal({ isOpen, onClose, task, onStatusUpdate 
                   disabled={loading}
                   className="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all font-medium disabled:opacity-50"
                 >
-                  {loading ? 'Updating...' : '✅ Complete'}
+                  {loading ? 'Updating...' : ' Complete'}
                 </button>
               )}
             </div>

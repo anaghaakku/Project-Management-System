@@ -72,7 +72,6 @@ export default function Dashboard() {
         api.get('/tasks'),
       ]);
 
-      // Handle projects response
       let projectsData = [];
       const projectsResponse = projectsRes.data;
       if (Array.isArray(projectsResponse)) {
@@ -84,7 +83,6 @@ export default function Dashboard() {
       }
       setProjects(projectsData);
 
-      // Handle tasks response
       let tasksData = [];
       const tasksResponse = tasksRes.data;
       if (Array.isArray(tasksResponse)) {
@@ -95,7 +93,6 @@ export default function Dashboard() {
         tasksData = [];
       }
 
-      // If user is not admin, only show tasks assigned to them
       if (user?.role !== 'admin' && user?.id) {
         tasksData = tasksData.filter((task: Task) => task.assigned_to === user.id);
       }
@@ -112,7 +109,7 @@ export default function Dashboard() {
         localStorage.removeItem('user');
         setTimeout(() => router.push('/login'), 2000);
       } else if (error.code === 'ERR_NETWORK') {
-        setError('⚠️ Cannot connect to server. Please make sure the backend is running on http://localhost:8080');
+        setError('Cannot connect to server. Please make sure the backend is running on http://localhost:8080');
       }
     } finally {
       setLoading(false);
@@ -147,9 +144,8 @@ export default function Dashboard() {
     router.push('/login');
   };
 
-  // ✅ Function to open the modal
   const openTaskModal = () => {
-    console.log('🟢 Opening task modal...');
+    console.log('Opening task modal...');
     setIsModalOpen(true);
   };
 
@@ -164,20 +160,8 @@ export default function Dashboard() {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return '✅';
-      case 'in_progress':
-        return '🔄';
-      default:
-        return '⏳';
-    }
-  };
-
   const completedTasks = Array.isArray(tasks) ? tasks.filter(t => t.status === 'completed').length : 0;
   const pendingTasks = Array.isArray(tasks) ? tasks.filter(t => t.status === 'pending').length : 0;
-  const inProgressTasks = Array.isArray(tasks) ? tasks.filter(t => t.status === 'in_progress').length : 0;
 
   if (loading) {
     return (
@@ -201,7 +185,7 @@ export default function Dashboard() {
             onClick={() => window.location.reload()}
             className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all"
           >
-            🔄 Retry
+            Retry
           </button>
         </div>
       </div>
@@ -235,10 +219,10 @@ export default function Dashboard() {
               {isAdmin && (
                 <>
                   <a href="/employees" className="text-sm text-gray-600 hover:text-indigo-600 transition-all">
-                    👥 Employees
+                    Employees
                   </a>
                   <a href="/admin" className="text-sm text-gray-600 hover:text-indigo-600 transition-all">
-                    ⚙️ Admin
+                    Admin
                   </a>
                 </>
               )}
@@ -257,7 +241,7 @@ export default function Dashboard() {
               onClick={handleLogout}
               className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-full transition-all duration-200 border border-red-200 hover:border-red-300"
             >
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
@@ -269,7 +253,7 @@ export default function Dashboard() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24"></div>
           <div className="relative">
             <h2 className="text-2xl sm:text-3xl font-bold">
-              👋 Welcome back, {user?.name}!
+              Welcome back, {user?.name}!
             </h2>
             <p className="text-indigo-100 mt-1">Here's what's happening with your projects today</p>
           </div>
@@ -282,9 +266,6 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-500 font-medium">Total Projects</p>
                 <p className="text-3xl font-bold text-indigo-600 mt-1">{projectsList.length}</p>
               </div>
-              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-2xl">
-                📁
-              </div>
             </div>
           </div>
 
@@ -293,9 +274,6 @@ export default function Dashboard() {
               <div>
                 <p className="text-sm text-gray-500 font-medium">Total Tasks</p>
                 <p className="text-3xl font-bold text-purple-600 mt-1">{tasksList.length}</p>
-              </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">
-                📋
               </div>
             </div>
           </div>
@@ -306,9 +284,6 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-500 font-medium">Completed</p>
                 <p className="text-3xl font-bold text-emerald-600 mt-1">{completedTasks}</p>
               </div>
-              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-2xl">
-                ✅
-              </div>
             </div>
           </div>
 
@@ -318,19 +293,15 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-500 font-medium">Pending</p>
                 <p className="text-3xl font-bold text-amber-600 mt-1">{pendingTasks}</p>
               </div>
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-2xl">
-                ⏳
-              </div>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Projects Card */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                📁 Projects
+                Projects
                 <span className="text-sm font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
                   {projectsList.length}
                 </span>
@@ -369,7 +340,7 @@ export default function Dashboard() {
                           ? 'bg-amber-100 text-amber-700 border border-amber-200'
                           : 'bg-gray-100 text-gray-700 border border-gray-200'
                       }`}>
-                        {p.status === 'completed' ? '✅' : p.status === 'in_progress' ? '🔄' : '⏳'}
+                        {p.status === 'completed' ? 'Completed' : p.status === 'in_progress' ? 'In Progress' : 'Pending'}
                       </span>
                     </div>
                   </div>
@@ -378,17 +349,15 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Tasks Card */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                📋 Tasks
+                Tasks
                 <span className="text-sm font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
                   {tasksList.length}
                 </span>
               </h3>
               {isAdmin ? (
-                // ✅ Fixed: Button with onClick
                 <button
                   onClick={openTaskModal}
                   className="text-sm bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-xl font-medium hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -411,7 +380,6 @@ export default function Dashboard() {
                     className="group flex items-center justify-between bg-gray-50 rounded-xl p-4 hover:bg-white hover:shadow-md border border-transparent hover:border-gray-200 transition-all duration-200 cursor-pointer"
                   >
                     <div className="flex items-center gap-3 flex-1">
-                      <span className="text-xl">{getStatusIcon(t.status)}</span>
                       <div>
                         <p className="font-medium text-gray-800 group-hover:text-purple-600 transition-colors">
                           {t.title}
@@ -432,15 +400,14 @@ export default function Dashboard() {
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-400 border-t border-gray-200/50 pt-6">
-          © 2026 Project Management System. Built with ❤️ using Next.js & Go
+          © 2026 Project Management System. Built with using Next.js & Go
         </div>
       </div>
 
-      {/* ✅ Task Modal */}
       <TaskModal
         isOpen={isModalOpen}
         onClose={() => {
-          console.log('🔴 Closing task modal...');
+          console.log('Closing task modal...');
           setIsModalOpen(false);
         }}
         onTaskCreated={handleTaskCreated}

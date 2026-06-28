@@ -26,7 +26,7 @@ func main() {
 
     r := gin.Default()
 
-    // CORS
+    
     r.Use(func(c *gin.Context) {
         c.Header("Access-Control-Allow-Origin", "*")
         c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
@@ -38,11 +38,9 @@ func main() {
         c.Next()
     })
 
-    // PUBLIC ROUTES
     r.POST("/api/auth/login", handlers.Login(db))
     r.POST("/api/auth/register", handlers.Register(db))
 
-    // ✅ TEST ENDPOINT 1: Test bcrypt directly
     r.POST("/api/test-bcrypt", func(c *gin.Context) {
         var req struct {
             Password string `json:"password"`
@@ -60,7 +58,6 @@ func main() {
         })
     })
 
-    // ✅ TEST ENDPOINT 2: Debug what the server receives
     r.POST("/api/debug-login", func(c *gin.Context) {
         body, _ := io.ReadAll(c.Request.Body)
         c.JSON(200, gin.H{
@@ -68,7 +65,6 @@ func main() {
         })
     })
 
-    // ✅ DEBUG AUTH – Returns bcrypt error in response
     r.POST("/api/debug-auth", func(c *gin.Context) {
         var req struct {
             Email    string `json:"email"`
@@ -85,7 +81,6 @@ func main() {
             return
         }
 
-        // Compare
         err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 
         c.JSON(200, gin.H{
@@ -99,7 +94,6 @@ func main() {
         })
     })
 
-    // ✅ CREATE USER WITH PROPER HASH (Bypasses registration handler)
     r.POST("/api/create-user", func(c *gin.Context) {
         var req struct {
             Name     string `json:"name"`
@@ -112,14 +106,13 @@ func main() {
             return
         }
 
-        // Check if user already exists
         var existing models.User
         if err := db.Where("email = ?", req.Email).First(&existing).Error; err == nil {
             c.JSON(400, gin.H{"error": "Email already registered"})
             return
         }
 
-        // Hash the password
+        
         hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
         if err != nil {
             c.JSON(500, gin.H{"error": "Failed to hash password"})
@@ -150,7 +143,7 @@ func main() {
         })
     })
 
-    // ✅ TEST LOGIN – Bypasses bcrypt for testing (generates token without password check)
+    
     r.POST("/api/test-login", func(c *gin.Context) {
         var req struct {
             Email string `json:"email"`
@@ -166,7 +159,6 @@ func main() {
             return
         }
 
-        // Generate token without password check
         token, err := utils.GenerateToken(user.ID, user.Email, user.Role)
         if err != nil {
             c.JSON(500, gin.H{"error": "Failed to generate token"})
@@ -184,7 +176,6 @@ func main() {
         })
     })
 
-    // ✅ DEBUG: Test auth middleware
     r.GET("/api/debug-auth-test", middleware.AuthMiddleware(), func(c *gin.Context) {
         userID, exists := c.Get("userID")
         email, _ := c.Get("email")
@@ -197,7 +188,6 @@ func main() {
         })
     })
 
-    // PROTECTED ROUTES
     api := r.Group("/api")
     api.Use(middleware.AuthMiddleware())
 

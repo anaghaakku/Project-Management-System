@@ -83,7 +83,7 @@ export default function ProjectDetailModal({
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            📁 Project Details
+             Project Details
           </h2>
           <button
             onClick={onClose}
@@ -100,7 +100,7 @@ export default function ProjectDetailModal({
         )}
 
         {isEditing && isAdmin ? (
-          // ✅ Edit Mode
+          
           <div className="space-y-4">
             <div>
               <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Project Name</label>
@@ -133,12 +133,12 @@ export default function ProjectDetailModal({
                 disabled={loading}
                 className="flex-1 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all disabled:opacity-50"
               >
-                {loading ? 'Saving...' : '💾 Save'}
+                {loading ? 'Saving...' : ' Save'}
               </button>
             </div>
           </div>
         ) : (
-          // ✅ View Mode
+
           <div className="space-y-4">
             <div>
               <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Name</label>
@@ -173,7 +173,6 @@ export default function ProjectDetailModal({
           </div>
         )}
 
-        {/* ✅ Actions */}
         {!isEditing && (
           <div className="mt-6 pt-4 border-t border-gray-200">
             <div className="flex flex-col gap-2">
@@ -183,14 +182,14 @@ export default function ProjectDetailModal({
                     onClick={handleEditClick}
                     className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all font-medium"
                   >
-                    ✏️ Edit Project
+                     Edit Project
                   </button>
                   <button
                     onClick={handleDelete}
                     disabled={loading}
                     className="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-all font-medium disabled:opacity-50"
                   >
-                    🗑️ Delete
+                     Delete
                   </button>
                 </div>
               )}
