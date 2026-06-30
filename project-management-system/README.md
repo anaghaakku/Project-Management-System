@@ -5,7 +5,7 @@ A full-stack project management application built with **Go (Gin)** backend and 
 
 ---
 
-## 🏗️ Architecture Explanation
+##  Architecture Explanation
 ┌─────────────────────────────────────────────────────────────┐
 │ Frontend (Next.js) │
 │ Login │ Dashboard │ Projects │ Tasks │ Admin Panel │
@@ -47,7 +47,7 @@ A full-stack project management application built with **Go (Gin)** backend and 
 
 ---
 
-## 📊 ER Diagram
+## ER Diagram
 ┌─────────────────────┐ ┌─────────────────────┐
 │ Users │ │ Projects │
 ├─────────────────────┤ ├─────────────────────┤
@@ -87,7 +87,7 @@ A full-stack project management application built with **Go (Gin)** backend and 
 
 ---
 
-## 🔧 Setup Steps
+##  Setup Steps
 
 ### Prerequisites
 
